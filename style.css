@@ -789,28 +789,28 @@ ul {
 
 .map-layout {
     display: flex;
-    flex-direction: column;
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
-    border: 4px solid var(--white);
-    margin-top: 20px;
+    flex-direction: column; /* Mobile Default */
+    gap: 30px;
+    margin-top: 30px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
     .map-layout {
-        flex-direction: row;
-        height: 500px;
+        flex-direction: row; /* Desktop Switch */
+        height: 600px; /* FIXED parent height is CRITICAL for map sizing */
+        align-items: stretch;
     }
 }
 
 .map-locations-list {
-    padding: 24px;
-    background: #f8f9fc;
-    border-left: 1px solid var(--gray-200);
-    flex: 0 0 300px;
+    padding: 0;
     overflow-y: auto;
+}
+
+@media (min-width: 992px) {
+    .map-locations-list {
+        flex: 0 0 450px; /* Sidebar takes fixed width */
+    }
 }
 
 .map-locations-list h3 {
@@ -829,60 +829,63 @@ ul {
 }
 
 .map-locations-list ul {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* FORCES 2 COLUMNS */
+    gap: 15px;
+    padding: 0;
 }
 
 .map-locations-list li {
-    padding: 12px 16px;
     background: var(--white);
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-xl); /* Rounded "Pill" shape */
+    padding: 16px 15px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Space for the icon */
+    text-align: center;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--gray-800);
     cursor: pointer;
     transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 12px;
     border: 1px solid transparent;
 }
 
 .map-locations-list li:hover {
     border-color: var(--primary);
-    transform: translateX(-5px);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.map-locations-list li::before {
+    content: '📍'; /* Dynamic icon addition */
+    font-size: 1.1rem;
 }
 
 .map-locations-list li.active {
     background: var(--primary);
     color: var(--white);
-}
-
-.map-locations-list li::before {
-    content: '';
-    width: 10px;
-    height: 10px;
-    background: var(--accent);
-    border-radius: 50%;
-}
-
-.map-locations-list li.active::before {
-    background: var(--white);
+    border-color: var(--primary);
 }
 
 .map-container {
-    height: 400px; /* Mobile height */
+    height: 450px; /* Explicit height on mobile */
+    min-height: 450px;
     width: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     position: relative;
-    z-index: 1; /* For Leaflet controls */
-    flex: 1;
+    z-index: 10;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
     .map-container {
-        height: 100%;
+        height: 100%; /* Fills the 600px height of the parent .map-layout */
+        min-height: unset;
+        flex: 1; /* Takes ALL remaining horizontal space */
     }
 }
 

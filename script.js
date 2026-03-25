@@ -277,6 +277,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const locationListEl = document.getElementById('locationList');
 
+        // CRITICAL: Call this whenever the window is resized
+        window.addEventListener('resize', () => {
+            map.invalidateSize();
+        });
+
+        // BEST PRACTICE: Call it when the section comes into view (Intersection Observer)
+        const mapObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Increased timeout to wait for AOS animations to complete
+                    setTimeout(() => map.invalidateSize(), 500);
+                }
+            });
+        }, { threshold: 0.1 });
+        mapObserver.observe(mapElement);
+
+        // Final fallback to ensure map renders after all assets and animations are done
+        window.addEventListener('load', () => {
+            setTimeout(() => map.invalidateSize(), 1000);
+        });
+
         locations.forEach(loc => {
             const marker = L.marker(loc.coords, { icon: defaultIcon })
                 .addTo(map)
